@@ -356,6 +356,7 @@
       align-items: center;
       gap: 12px;
       transition: all 0.3s ease;
+      flex-wrap: wrap;
     }
 
     .device-section:hover {
@@ -365,17 +366,23 @@
 
     .device-icon {
       font-size: 32px;
+      flex-shrink: 0;
     }
 
     .device-info {
       text-align: left;
       flex: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
     }
 
     .device-name {
       font-size: 14px;
       font-weight: 600;
       color: var(--accent);
+      width: 100%;
       margin-bottom: 4px;
     }
 
@@ -387,10 +394,7 @@
       border-radius: 8px;
       display: inline-block;
       font-weight: 500;
-    }
-
-    .device-tag + .device-tag {
-      margin-left: 8px;
+      white-space: nowrap;
     }
 
     canvas.snow {
