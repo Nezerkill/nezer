@@ -1,14 +1,618 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="My Bio Link - Telegram Bio Site" />
-    <title>My Bio</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>nezerkill - Bio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root {
+      --accent: #ffffff;
+      --muted: rgba(255, 255, 255, 0.8);
+      --glow-color: rgba(255, 255, 255, 0.85);
+      --blur: 15px;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; overflow: hidden; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0a url('./background.jpg') center/cover no-repeat fixed;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Click to Reveal Overlay */
+    .reveal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      cursor: pointer;
+      transition: all 0.5s ease;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    .reveal-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .reveal-content {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .reveal-icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      animation: pulse 2s infinite;
+      color: var(--accent);
+    }
+
+    .reveal-text {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--accent);
+      text-shadow: 0 0 15px var(--glow-color);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .card {
+      position: relative;
+      background: rgba(15, 20, 25, 0.55);
+      backdrop-filter: blur(var(--blur));
+      -webkit-backdrop-filter: blur(var(--blur));
+      border-radius: var(--radius);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 0 60px rgba(255, 255, 255, 0.08);
+      padding: 40px;
+      width: 420px;
+      text-align: center;
+      max-width: 100%;
+      max-height: 95vh;
+      overflow-y: auto;
+      z-index: 1;
+    }
+
+    .card::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .card::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    .card::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+    }
+
+    .meta-top {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .meta {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 13px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .meta:hover {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 15px var(--glow-color);
+      transform: translateY(-2px) scale(1.05);
+    }
+
+    .meta:hover i {
+      color: #fff;
+      text-shadow: 0 0 6px var(--glow-color);
+    }
+
+    .info-tooltip {
+      position: absolute;
+      top: -50px;
+      right: 0;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 6px 12px;
+      border-radius: 12px;
+      color: var(--accent);
+      font-size: 12px;
+      white-space: nowrap;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
+      opacity: 0;
+      transform: translateY(10px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .meta.info:hover + .info-tooltip {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .avatar {
+      width: 90px;
+      height: 90px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 0 20px var(--glow-color);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      transition: transform 0.5s ease;
+    }
+
+    .avatar:hover img {
+      transform: scale(1.1);
+    }
+
+    h1 {
+      margin: 10px 0;
+      font-size: 22px;
+      text-shadow: 0 0 15px var(--glow-color);
+    }
+
+    .roles {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 14px 0;
+    }
+
+    .role {
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      padding: 8px 14px;
+      border-radius: 999px;
+      color: var(--muted);
+      text-shadow: 0 0 10px var(--glow-color);
+      transition: all 0.3s ease;
+    }
+
+    .role:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.05);
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      margin: 20px 0;
+    }
+
+    .bio {
+      margin-top: 18px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .social {
+      display: flex;
+      gap: 18px;
+      justify-content: center;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .s-btn {
+      width: 48px;
+      height: 48px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 22px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .s-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .s-btn:hover::before {
+      left: 100%;
+    }
+
+    .s-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 20px var(--glow-color);
+      transform: translateY(-5px) scale(1.1);
+    }
+
+    .s-btn.github:hover { background: rgba(255, 255, 255, 0.2); }
+    .s-btn.telegram:hover { background: rgba(0, 136, 204, 0.4); }
+    .s-btn.spotify:hover { background: rgba(29, 185, 84, 0.4); }
+    .s-btn.youtube:hover { background: rgba(255, 0, 0, 0.4); }
+    .s-btn.twitch:hover { background: rgba(145, 70, 255, 0.4); }
+
+    .specs-section {
+      margin-top: 20px;
+      text-align: left;
+    }
+
+    .specs-title {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .specs-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .spec-item {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .spec-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.02);
+    }
+
+    .spec-label {
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .spec-value {
+      font-size: 12px;
+      color: var(--accent);
+      font-weight: 500;
+      display: block;
+    }
+
+    .device-section {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+
+    .device-section:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: scale(1.02);
+    }
+
+    .device-icon {
+      font-size: 32px;
+    }
+
+    .device-info {
+      text-align: left;
+      flex: 1;
+    }
+
+    .device-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .device-tag {
+      font-size: 13px;
+      color: var(--muted);
+      background: rgba(255, 255, 255, 0.1);
+      padding: 6px 12px;
+      border-radius: 8px;
+      display: inline-block;
+      font-weight: 500;
+    }
+
+    .device-tag + .device-tag {
+      margin-left: 8px;
+    }
+
+    canvas.snow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @media (max-width: 768px) {
+      .card {
+        padding: 30px 20px;
+        width: 100%;
+        max-height: 95vh;
+      }
+      
+      .reveal-text {
+        font-size: 20px;
+      }
+      
+      .specs-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .social {
+        gap: 12px;
+      }
+      
+      .s-btn {
+        width: 44px;
+        height: 44px;
+      }
+    }
+
+    @supports not (backdrop-filter: blur(1px)) {
+      .card {
+        background: rgba(15, 20, 25, 0.85);
+      }
+      .reveal-overlay {
+        background: rgba(0, 0, 0, 0.85);
+      }
+    }
+  </style>
+</head>
+<body>
+  <canvas class="snow"></canvas>
+  
+  <!-- Click to Reveal Overlay -->
+  <div class="reveal-overlay" id="revealOverlay">
+    <div class="reveal-content">
+      <div class="reveal-icon">
+        <i class="fa-solid fa-fingerprint"></i>
+      </div>
+      <div class="reveal-text">Click to Reveal</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="meta-top">
+      <div class="meta views">
+        <i class="fa-solid fa-eye"></i> <span id="views-count">0</span>
+      </div>
+      <div class="meta info">
+        <i class="fa-solid fa-circle-info"></i>
+      </div>
+      <div class="info-tooltip">Bio by @nezerkill</div>
+    </div>
+
+    <div class="avatar">
+      <img src="./avatar.jpg" alt="Avatar">
+    </div>
+    
+    <h1>nezerkill</h1>
+
+    <div class="roles">
+      <div class="role">Linux User</div>
+      <div class="role">Arch Based</div>
+    </div>
+
+    <div class="divider"></div>
+    <p class="bio">CachyOS User | Hyprland Enthusiast</p>
+    <div class="divider"></div>
+
+    <div class="social">
+      <a class="s-btn github" href="https://github.com/Nezerkill" target="_blank" title="GitHub">
+        <i class="fa-brands fa-github"></i>
+      </a>
+      <a class="s-btn telegram" href="https://t.me/nezerkill" target="_blank" title="Telegram">
+        <i class="fa-brands fa-telegram"></i>
+      </a>
+      <a class="s-btn spotify" href="https://open.spotify.com/user/nezerkill" target="_blank" title="Spotify">
+        <i class="fa-brands fa-spotify"></i>
+      </a>
+      <a class="s-btn youtube" href="https://www.youtube.com/@Nezerkill" target="_blank" title="YouTube">
+        <i class="fa-brands fa-youtube"></i>
+      </a>
+      <a class="s-btn twitch" href="https://www.twitch.tv/nezer_kill" target="_blank" title="Twitch">
+        <i class="fa-brands fa-twitch"></i>
+      </a>
+    </div>
+
+    <div class="specs-section">
+      <div class="specs-title">
+        <i class="fa-solid fa-desktop"></i> PC Specs
+      </div>
+      <div class="specs-grid">
+        <div class="spec-item">
+          <span class="spec-label"><i class="fa-brands fa-linux"></i> OS</span>
+          <span class="spec-value">CachyOS Linux</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label">🪟 WM</span>
+          <span class="spec-value">Hyprland</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label"><i class="fa-solid fa-microchip"></i> CPU</span>
+          <span class="spec-value">Intel Xeon E5-2640 v3 (16)</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label"><i class="fa-solid fa-video"></i> GPU</span>
+          <span class="spec-value">AMD Radeon RX 5700 XT</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label"><i class="fa-solid fa-memory"></i> RAM</span>
+          <span class="spec-value">16 GB DDR4</span>
+        </div>
+        <div class="spec-item">
+          <span class="spec-label"><i class="fa-solid fa-hard-drive"></i> Storage</span>
+          <span class="spec-value">512 GB NVMe</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="device-section">
+      <div class="device-icon">📱</div>
+      <div class="device-info">
+        <div class="device-name">Poco F6</div>
+        <div class="device-tag">8/256 GB</div>
+        <div class="device-tag">Snapdragon 8s Gen 3</div>
+        <div class="device-tag">Daily Driver</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Click to Reveal
+    const revealOverlay = document.getElementById('revealOverlay');
+    let revealed = false;
+    
+    revealOverlay.addEventListener('click', function() {
+      this.classList.add('hidden');
+      revealed = true;
+      draw(); // Start snow after reveal
+    });
+
+    // Snow effect
+    const canvas = document.querySelector('.snow');
+    const ctx = canvas.getContext('2d');
+    let w, h;
+    const flakes = [];
+    
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    
+    addEventListener('resize', resize);
+    resize();
+    
+    for (let i = 0; i < 100; i++) {
+      flakes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        r: Math.random() * 4 + 1,
+        d: Math.random() + 1
+      });
+    }
+    
+    let angle = 0;
+    
+    function draw() {
+      if (!revealed) return;
+      
+      ctx.clearRect(0, 0, w, h);
+      ctx.fillStyle = 'white';
+      ctx.beginPath();
+      
+      for (let f of flakes) {
+        ctx.moveTo(f.x, f.y);
+        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+      }
+      ctx.fill();
+      
+      angle += 0.005;
+      for (let f of flakes) {
+        f.y += Math.pow(f.d, 2) * 0.5 + 0.5;
+        f.x += Math.sin(angle) * 1.5;
+        if (f.y > h) {
+          f.y = 0;
+          f.x = Math.random() * w;
+        }
+      }
+      
+      requestAnimationFrame(draw);
+    }
+
+    // Views counter
+    fetch("https://api.counterapi.dev/v2/biocouter/biocouter/up")
+      .then(res => res.json())
+      .then(data => {
+        if (data?.data?.up_count !== undefined) {
+          document.getElementById("views-count").textContent = data.data.up_count.toLocaleString();
+        } else {
+          document.getElementById("views-count").textContent = "0";
+        }
+      })
+      .catch(() => {
+        document.getElementById("views-count").textContent = "0";
+      });
+  </script>
+</body>
 </html>
