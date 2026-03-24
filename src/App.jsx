@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import avatarImg from './avatar.jpg'
 import { 
   FaGithub, 
   FaTelegram, 
@@ -28,17 +29,17 @@ function App() {
   const profile = {
     username: "nezerkill",
     bio: "CachyOS User | Hyprland Enthusiast",
-    avatar: "https://via.placeholder.com/150",
+    avatar: avatarImg,
     roles: ["Linux User", "Arch Based"],
     views: true
   }
 
   const socialLinks = {
-    github: "https://github.com/yourusername",
-    telegram: "https://t.me/yourusername",
-    spotify: "https://open.spotify.com/user/yourusername",
-    youtube: "https://youtube.com/@yourchannel",
-    twitch: "https://twitch.tv/yourchannel"
+    github: "https://github.com/Nezerkill",
+    telegram: "https://t.me/nezerkill",
+    spotify: "https://open.spotify.com/user/nezerkill",
+    youtube: "https://www.youtube.com/@Nezerkill",
+    twitch: "https://www.twitch.tv/nezer_kill"
   }
 
   const pcSpecs = {
