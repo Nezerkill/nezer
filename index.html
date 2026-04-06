@@ -4,803 +4,1160 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>nezerkill - Bio</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
     :root {
-      --accent: #ffffff;
-      --muted: rgba(255, 255, 255, 0.8);
-      --glow-color: rgba(255, 255, 255, 0.85);
-      --blur: 15px;
-      --radius: 16px;
+      --font-sans: 'Manrope', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+
+      --background: #0e1223;
+      --background-deep: #090d19;
+      --surface: rgba(27, 31, 48, 0.82);
+      --surface-strong: rgba(48, 52, 70, 0.9);
+      --surface-soft: rgba(65, 69, 89, 0.28);
+      --surface-softer: rgba(98, 104, 128, 0.14);
+      --text: #dee1f9;
+      --text-soft: #cec3cf;
+      --text-muted: #aab1d3;
+      --primary: #e5baff;
+      --primary-strong: #ca9ee6;
+      --secondary: #8caaee;
+      --tertiary: #81c8be;
+      --glow: rgba(222, 225, 249, 0.08);
+      --highlight: rgba(229, 186, 255, 0.24);
+      --ghost-border: rgba(115, 121, 148, 0.18);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+      --space-1: 6px;
+      --space-2: 10px;
+      --space-3: 14px;
+      --space-4: 18px;
+      --space-5: 24px;
+      --space-6: 32px;
+      --space-7: 40px;
+      --space-8: 52px;
+      --card-width: min(960px, calc(100vw - 32px));
+      --transition: 220ms ease;
     }
 
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; overflow: hidden; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+      min-height: 100%;
+      margin: 0;
+    }
 
     body {
-      font-family: 'Inter', sans-serif;
-      background: #0a0a0a url('./background.jpg') center/cover no-repeat fixed;
-      color: var(--accent);
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 28% 24%, rgba(202, 158, 230, 0.28), transparent 20%),
+        radial-gradient(circle at 73% 66%, rgba(140, 170, 238, 0.16), transparent 20%),
+        linear-gradient(160deg, rgba(9, 13, 25, 0.98), rgba(14, 18, 35, 0.92)),
+        var(--background);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: var(--space-5);
       position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
     }
 
     body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
-      pointer-events: none;
-      z-index: -1;
+      background:
+        linear-gradient(135deg, rgba(9, 13, 25, 0.78), rgba(9, 13, 25, 0.38)),
+        url('./background.jpg') center/cover no-repeat;
+      filter: saturate(0.9) blur(1px);
+      transform: scale(1.04);
+      opacity: 0.6;
     }
 
-    /* Click to Reveal Overlay */
+    body::after {
+      background:
+        radial-gradient(circle at 34% 18%, rgba(202, 158, 230, 0.16), transparent 24%),
+        radial-gradient(circle at 64% 72%, rgba(140, 170, 238, 0.14), transparent 28%);
+      mix-blend-mode: screen;
+      opacity: 0.8;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page-shell {
+      position: relative;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      z-index: 1;
+    }
+
+    .ambient-ring,
+    .ambient-ring::before,
+    .ambient-ring::after {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .ambient-ring {
+      width: 92vw;
+      max-width: 1280px;
+      aspect-ratio: 1;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      border: 28px solid rgba(202, 158, 230, 0.07);
+      filter: blur(1px);
+      opacity: 0.85;
+    }
+
+    .ambient-ring::before,
+    .ambient-ring::after {
+      content: '';
+      inset: 11%;
+      border: 20px solid rgba(140, 170, 238, 0.08);
+    }
+
+    .ambient-ring::after {
+      inset: 24%;
+      border-color: rgba(229, 186, 255, 0.12);
+    }
+
     .reveal-overlay {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      inset: 0;
+      z-index: 10;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      padding: var(--space-5);
+      background: rgba(9, 13, 25, 0.72);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       cursor: pointer;
-      transition: all 0.5s ease;
-      -webkit-tap-highlight-color: transparent;
-      -webkit-user-select: none;
-      -webkit-touch-callout: none;
+      transition: opacity 400ms ease, visibility 400ms ease;
     }
 
     .reveal-overlay.hidden {
       opacity: 0;
+      visibility: hidden;
       pointer-events: none;
     }
 
     .reveal-content {
+      width: min(420px, 100%);
+      padding: var(--space-7) var(--space-6);
       text-align: center;
-      padding: 40px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(48, 52, 70, 0.62), rgba(27, 31, 48, 0.78));
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(229, 186, 255, 0.18);
     }
 
     .reveal-icon {
-      font-size: 48px;
-      margin-bottom: 20px;
-      animation: pulse 2s infinite;
-      color: var(--accent);
+      width: 88px;
+      height: 88px;
+      margin: 0 auto var(--space-5);
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(229, 186, 255, 0.28), rgba(140, 170, 238, 0.16));
+      box-shadow: 0 0 0 10px rgba(98, 104, 128, 0.12), 0 0 44px rgba(202, 158, 230, 0.18);
+      font-size: 34px;
+      color: var(--primary);
+      animation: pulse 2.6s ease-in-out infinite;
+    }
+
+    .reveal-kicker,
+    .stat-label,
+    .panel-kicker,
+    .meta-badge,
+    .activity-label,
+    .identity-badge {
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.24em;
     }
 
     .reveal-text {
-      font-size: 24px;
+      margin: 0;
+      font-size: clamp(28px, 5vw, 42px);
       font-weight: 600;
-      color: var(--accent);
-      text-shadow: 0 0 15px var(--glow-color);
-    }
-
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.1); }
-      100% { transform: scale(1); }
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      color: var(--text);
     }
 
     .card {
       position: relative;
-      background: rgba(15, 20, 25, 0.55);
-      backdrop-filter: blur(var(--blur));
-      -webkit-backdrop-filter: blur(var(--blur));
-      border-radius: var(--radius);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 0 60px rgba(255, 255, 255, 0.08);
-      padding: 40px;
-      width: 420px;
-      text-align: center;
-      max-width: 100%;
-      max-height: 95vh;
-      overflow-y: auto;
-      z-index: 1;
+      width: var(--card-width);
+      display: grid;
+      grid-template-columns: minmax(270px, 0.9fr) minmax(0, 1.3fr);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(145deg, rgba(27, 31, 48, 0.84), rgba(20, 24, 38, 0.76));
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      box-shadow: 0 26px 80px rgba(0, 0, 0, 0.34), 0 0 60px var(--glow), inset 0 1px 0 rgba(229, 186, 255, 0.12);
+      overflow: hidden;
+      min-height: 560px;
     }
 
-    .card::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .card::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 10px;
-    }
-
-    .card::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 10px;
-    }
-
-    .meta-top {
+    .card::before {
+      content: '';
       position: absolute;
-      top: 12px;
-      right: 12px;
-      display: flex;
-      gap: 10px;
-    }
-
-    .meta {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 6px 10px;
-      font-size: 13px;
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-
-    .meta:hover {
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 15px var(--glow-color);
-      transform: translateY(-2px) scale(1.05);
-    }
-
-    .meta:hover i {
-      color: #fff;
-      text-shadow: 0 0 6px var(--glow-color);
-    }
-
-    .info-tooltip {
-      position: absolute;
-      top: -50px;
-      right: 0;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 6px 12px;
-      border-radius: 12px;
-      color: var(--accent);
-      font-size: 12px;
-      white-space: nowrap;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-      opacity: 0;
-      transform: translateY(10px);
+      inset: 0;
+      background: linear-gradient(90deg, rgba(229, 186, 255, 0.04), transparent 38%, rgba(140, 170, 238, 0.03));
       pointer-events: none;
-      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    .meta.info:hover + .info-tooltip {
-      opacity: 1;
-      transform: translateY(0);
+    .profile-panel,
+    .content-panel {
+      position: relative;
+      padding: var(--space-8);
+    }
+
+    .profile-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: var(--space-5);
+      background: linear-gradient(180deg, rgba(42, 44, 66, 0.28), rgba(27, 31, 48, 0.08));
+    }
+
+    .profile-panel::after {
+      content: '';
+      position: absolute;
+      top: var(--space-8);
+      right: 0;
+      width: 1px;
+      height: calc(100% - (var(--space-8) * 2));
+      background: linear-gradient(180deg, transparent, rgba(115, 121, 148, 0.22), transparent);
+      opacity: 0.55;
+    }
+
+    .content-panel {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-6);
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .avatar-shell {
+      position: relative;
+      width: 124px;
+      height: 124px;
+      margin: 0 auto;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: radial-gradient(circle, rgba(229, 186, 255, 0.3), rgba(140, 170, 238, 0.08));
+      box-shadow: 0 0 0 1px rgba(229, 186, 255, 0.2), 0 0 40px rgba(202, 158, 230, 0.22);
+    }
+
+    .avatar-shell::before {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      box-shadow: 0 0 0 12px rgba(98, 104, 128, 0.14);
+      opacity: 0.8;
     }
 
     .avatar {
-      width: 90px;
-      height: 90px;
-      margin: 0 auto 16px;
+      width: 100px;
+      height: 100px;
       border-radius: 50%;
       overflow: hidden;
-      background: rgba(255, 255, 255, 0.05);
-      box-shadow: 0 0 20px var(--glow-color);
+      background: rgba(14, 18, 35, 0.6);
     }
 
     .avatar img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 50%;
-      transition: transform 0.5s ease;
+      transform: scale(1.02);
+      transition: transform var(--transition), filter var(--transition);
+      filter: saturate(0.92) contrast(1.04);
     }
 
-    .avatar:hover img {
-      transform: scale(1.1);
+    .avatar-shell:hover img {
+      transform: scale(1.08);
+      filter: saturate(1) contrast(1.06);
+    }
+
+    .profile-copy {
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      color: var(--text-muted);
+      font-size: 10px;
+      margin-bottom: var(--space-4);
     }
 
     h1 {
-      margin: 10px 0;
-      font-size: 22px;
-      text-shadow: 0 0 15px var(--glow-color);
+      margin: 0;
+      font-size: clamp(38px, 4vw, 56px);
+      line-height: 0.96;
+      letter-spacing: -0.05em;
+      font-weight: 700;
+      text-shadow: 0 10px 36px rgba(0, 0, 0, 0.24);
     }
 
-    .roles {
-      display: flex;
+    .identity-badge {
+      display: inline-flex;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 14px 0;
-    }
-
-    .role {
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 8px 14px;
-      border-radius: 999px;
-      color: var(--muted);
-      text-shadow: 0 0 10px var(--glow-color);
-      transition: all 0.3s ease;
-    }
-
-    .role:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: scale(1.05);
-    }
-
-    .divider {
-      height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      margin: 20px 0;
+      align-items: center;
+      min-height: 46px;
+      padding: 0 var(--space-5);
+      margin-top: var(--space-5);
+      border-radius: var(--radius-md);
+      background: rgba(65, 69, 89, 0.34);
+      box-shadow: inset 0 0 0 1px rgba(115, 121, 148, 0.14);
+      color: var(--text-soft);
+      font-size: 12px;
     }
 
     .bio {
-      margin-top: 18px;
+      margin: 0;
+      color: var(--text-soft);
       font-size: 15px;
-      color: var(--muted);
-      line-height: 1.6;
+      line-height: 1.75;
+      max-width: 280px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
-    .social {
+    .meta-row {
       display: flex;
-      gap: 18px;
       justify-content: center;
-      margin-top: 18px;
       flex-wrap: wrap;
+      gap: var(--space-2);
     }
 
-    .s-btn {
-      width: 48px;
-      height: 48px;
-      display: grid;
-      place-items: center;
-      border-radius: 12px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--accent);
-      text-decoration: none;
-      font-size: 22px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .s-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-      transition: left 0.5s ease;
-    }
-
-    .s-btn:hover::before {
-      left: 100%;
-    }
-
-    .s-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 0 20px var(--glow-color);
-      transform: translateY(-5px) scale(1.1);
-    }
-
-    .s-btn.github:hover { background: rgba(255, 255, 255, 0.2); }
-    .s-btn.telegram:hover { background: rgba(0, 136, 204, 0.4); }
-    .s-btn.spotify:hover { background: rgba(29, 185, 84, 0.4); }
-    .s-btn.youtube:hover { background: rgba(255, 0, 0, 0.4); }
-    .s-btn.twitch:hover { background: rgba(145, 70, 255, 0.4); }
-
-    .specs-section {
-      margin-top: 20px;
-      text-align: left;
-    }
-
-    .specs-title {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 12px;
-      display: flex;
+    .meta-badge {
+      display: inline-flex;
       align-items: center;
-      gap: 8px;
-    }
-
-    .specs-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .spec-item {
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 10px;
-      transition: all 0.3s ease;
-    }
-
-    .spec-item:hover {
-      background: rgba(255, 255, 255, 0.1);
-      transform: scale(1.02);
-    }
-
-    .spec-label {
+      gap: var(--space-2);
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(65, 69, 89, 0.24);
+      color: var(--text-muted);
       font-size: 10px;
-      color: rgba(255, 255, 255, 0.5);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      display: block;
-      margin-bottom: 4px;
+      box-shadow: inset 0 0 0 1px rgba(115, 121, 148, 0.12);
     }
 
-    .spec-value {
-      font-size: 12px;
-      color: var(--accent);
-      font-weight: 500;
-      display: block;
+    .meta-badge i {
+      color: var(--secondary);
     }
 
-    .device-section {
-      margin-top: 20px;
-      padding: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px;
-      display: flex;
+    .views-count {
+      display: inline-flex;
       align-items: center;
-      gap: 12px;
-      transition: all 0.3s ease;
-      flex-wrap: wrap;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(202, 158, 230, 0.28), rgba(140, 170, 238, 0.18));
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      line-height: 1;
+      box-shadow: inset 0 0 0 1px rgba(229, 186, 255, 0.12);
     }
 
-    .device-section:hover {
-      background: rgba(255, 255, 255, 0.08);
-      transform: scale(1.02);
-    }
-
-    .device-icon {
-      font-size: 32px;
-      flex-shrink: 0;
-    }
-
-    .device-info {
-      text-align: left;
-      flex: 1;
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .device-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--accent);
-      width: 100%;
-      margin-bottom: 4px;
-    }
-
-    .device-tag {
-      font-size: 13px;
-      color: var(--muted);
-      background: rgba(255, 255, 255, 0.1);
-      padding: 6px 12px;
-      border-radius: 8px;
-      display: inline-block;
-      font-weight: 500;
-      white-space: nowrap;
-    }
-
-    /* Музыкальный плеер */
-    .music-player {
-      position: relative;
-      margin-top: 25px;
-      padding: 16px 22px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.08);
-      backdrop-filter: blur(var(--blur));
-      -webkit-backdrop-filter: blur(var(--blur));
-      transition: all 0.3s ease;
+    .panel-top {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      gap: var(--space-6);
+      width: min(100%, 440px);
     }
 
-    .music-player:hover {
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.08);
-      transform: translateY(-3px);
+    .music-widget,
+    .stats-widget {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(48, 52, 70, 0.32), rgba(27, 31, 48, 0.18));
+      box-shadow: inset 0 0 0 1px rgba(115, 121, 148, 0.08);
     }
 
-    .info-icon {
-      position: absolute;
-      top: 8px;
-      right: 10px;
-      font-size: 15px;
-      color: rgba(255, 255, 255, 0.45);
-      opacity: 0.6;
-      cursor: pointer;
-      transition: all 0.3s ease;
+    .music-widget {
+      padding: var(--space-2) 0 0;
+      background: transparent;
+      box-shadow: none;
     }
 
-    .info-icon:hover {
-      color: #fff;
-      opacity: 1;
-      transform: scale(1.1);
-      text-shadow: 0 0 6px var(--glow-color);
-    }
-
-    .track-tooltip {
-      position: absolute;
-      top: -35px;
-      right: 0;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      padding: 6px 12px;
-      border-radius: 12px;
-      color: var(--accent);
-      font-size: 13px;
-      white-space: nowrap;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      box-shadow: 0 0 15px rgba(255, 255, 255, 0.1);
-      opacity: 0;
-      transform: translateY(10px);
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
-
-    .info-icon:hover + .track-tooltip {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .controls {
+    .widget-header,
+    .widget-status {
       display: flex;
       align-items: center;
-      width: 100%;
-      gap: 15px;
-      cursor: pointer;
+      gap: var(--space-2);
+    }
+
+    .widget-topline {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+    }
+
+    .panel-kicker {
+      font-family: var(--font-sans);
+      color: var(--text-muted);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.28em;
+    }
+
+    .widget-header i,
+    .widget-status i {
+      color: var(--primary);
+    }
+
+    .widget-status {
+      color: var(--secondary);
+      font-family: var(--font-mono);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-size: 10px;
+    }
+
+    .track-card {
+      display: grid;
+      grid-template-columns: 60px minmax(0, 1fr);
+      gap: var(--space-4);
+      align-items: center;
+    }
+
+    .track-art {
+      position: relative;
+      width: 60px;
+      height: 60px;
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(229, 186, 255, 0.85), rgba(202, 158, 230, 0.15) 35%, transparent 36%),
+        linear-gradient(135deg, rgba(140, 170, 238, 0.18), rgba(229, 186, 255, 0.08)),
+        #120f1d;
+      box-shadow: inset 0 0 0 1px rgba(229, 186, 255, 0.28), 0 12px 28px rgba(0, 0, 0, 0.22);
+    }
+
+    .track-art::before,
+    .track-art::after {
+      content: '';
+      position: absolute;
+      inset: 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(202, 158, 230, 0.3);
+      transform: rotate(45deg);
+    }
+
+    .track-art::after {
+      inset: 19px;
+      border-color: rgba(140, 170, 238, 0.22);
+      transform: rotate(10deg);
+    }
+
+    .track-pulse {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-size: 20px;
+      color: var(--primary-strong);
+      text-shadow: 0 0 22px rgba(202, 158, 230, 0.7);
+    }
+
+    .track-meta {
+      min-width: 0;
+      text-align: left;
+    }
+
+    .track-title {
+      margin: 0;
+      font-size: clamp(24px, 2.5vw, 34px);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .track-artist {
+      margin: var(--space-1) 0 0;
+      font-size: 16px;
+      color: var(--text-soft);
+    }
+
+    .player-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      align-items: center;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
     }
 
     #play-btn {
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #fff;
-      border-radius: 50%;
       width: 44px;
       height: 44px;
-      font-size: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.25s ease;
+      border: 0;
+      border-radius: 50%;
+      background: linear-gradient(135deg, rgba(229, 186, 255, 0.26), rgba(202, 158, 230, 0.14));
+      color: var(--text);
+      display: grid;
+      place-items: center;
       cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+      box-shadow: inset 0 0 0 1px rgba(229, 186, 255, 0.18);
     }
 
     #play-btn:hover {
-      background: rgba(255, 255, 255, 0.12);
-      box-shadow: 0 0 25px rgba(255, 255, 255, 0.25);
-      transform: scale(1.05);
+      transform: translateY(-1px) scale(1.03);
+      box-shadow: 0 12px 28px rgba(202, 158, 230, 0.2), inset 0 0 0 1px rgba(229, 186, 255, 0.26);
+      background: linear-gradient(135deg, rgba(229, 186, 255, 0.32), rgba(202, 158, 230, 0.18));
     }
 
     .progress {
-      flex: 1;
-      height: 6px;
-      background: rgba(255, 255, 255, 0.15);
-      border-radius: 10px;
-      overflow: hidden;
       position: relative;
+      height: 6px;
+      width: 100%;
+      border-radius: 999px;
+      overflow: hidden;
+      background: rgba(98, 104, 128, 0.2);
       cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .progress:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.02);
     }
 
     .bar {
       position: absolute;
-      top: 0;
-      left: 0;
-      height: 100%;
-      background: linear-gradient(90deg, rgba(255, 255, 255, 0.8), rgba(180, 220, 255, 0.9));
-      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      inset: 0 auto 0 0;
       width: 0%;
-      transition: width 0.1s linear;
+      border-radius: inherit;
+      background: linear-gradient(90deg, var(--primary), var(--primary-strong));
+      box-shadow: 0 0 16px rgba(229, 186, 255, 0.34);
     }
 
-    .time {
-      font-size: 13px;
-      color: rgba(255, 255, 255, 0.8);
-      text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-      min-width: 40px;
+    .time,
+    .time-total {
+      min-width: 38px;
       text-align: right;
-      transition: all 0.3s ease;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-muted);
     }
 
-    canvas.snow {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+    .stats-widget {
+      padding: var(--space-5);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-5);
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-3);
+    }
+
+    .stat-card {
+      position: relative;
+      min-height: 94px;
+      padding: var(--space-4) var(--space-3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-1);
+      border-radius: var(--radius-md);
+      background: rgba(65, 69, 89, 0.2);
+      transition: transform var(--transition), background var(--transition);
+      box-shadow: inset 0 0 0 1px rgba(115, 121, 148, 0.08);
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      background: rgba(65, 69, 89, 0.28);
+    }
+
+    .stat-card i {
+      color: var(--secondary);
+      font-size: 18px;
+    }
+
+    .stat-value {
+      font-size: 26px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .stat-label {
+      font-size: 9px;
+      color: var(--text-muted);
+    }
+
+    .stat-tooltip {
+      position: absolute;
+      left: 50%;
+      bottom: calc(100% + 10px);
+      transform: translate(-50%, 8px);
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(48, 52, 70, 0.9);
+      color: var(--text);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18), inset 0 0 0 1px rgba(229, 186, 255, 0.12);
+      opacity: 0;
       pointer-events: none;
-      z-index: 0;
+      transition: opacity var(--transition), transform var(--transition);
     }
 
-    @media (max-width: 768px) {
+    .stat-card.has-tooltip:hover .stat-tooltip {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .activity-block {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+    }
+
+    .activity-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-4);
+    }
+
+    .activity-label {
+      font-size: 9px;
+      color: rgba(170, 177, 211, 0.72);
+    }
+
+    .activity-dots {
+      display: flex;
+      gap: var(--space-1);
+      align-items: center;
+    }
+
+    .activity-dots span,
+    .activity-grid span {
+      display: block;
+      border-radius: 3px;
+      background: rgba(98, 104, 128, 0.18);
+    }
+
+    .activity-dots span {
+      width: 8px;
+      height: 8px;
+    }
+
+    .activity-grid {
+      display: grid;
+      grid-template-columns: repeat(27, minmax(0, 1fr));
+      gap: var(--space-1);
+    }
+
+    .activity-grid span {
+      height: 10px;
+    }
+
+    .activity-grid span:nth-child(4n) {
+      background: rgba(202, 158, 230, 0.32);
+    }
+
+    .activity-grid span:nth-child(5n) {
+      background: rgba(202, 158, 230, 0.52);
+    }
+
+    .activity-grid span:nth-child(9n) {
+      background: rgba(229, 186, 255, 0.8);
+    }
+
+    .social {
+      display: flex;
+      justify-content: center;
+      gap: var(--space-4);
+      flex-wrap: wrap;
+      width: min(100%, 440px);
+    }
+
+    .s-btn {
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      font-size: 20px;
+      color: var(--text-soft);
+      background: rgba(65, 69, 89, 0.22);
+      box-shadow: inset 0 0 0 1px rgba(115, 121, 148, 0.08);
+      transition: transform var(--transition), background var(--transition), color var(--transition), box-shadow var(--transition);
+    }
+
+    .s-btn:hover {
+      transform: translateY(-2px);
+      color: var(--text);
+      background: rgba(65, 69, 89, 0.3);
+      box-shadow: 0 16px 32px rgba(0, 0, 0, 0.16), inset 0 0 0 1px rgba(229, 186, 255, 0.12);
+    }
+
+    .s-btn.spotify:hover,
+    .s-btn.github:hover,
+    .s-btn.telegram:hover,
+    .s-btn.youtube:hover,
+    .s-btn.twitch:hover {
+      color: var(--primary);
+    }
+
+    @keyframes pulse {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.06);
+      }
+    }
+
+    @media (max-width: 900px) {
       .card {
-        padding: 30px 20px;
-        width: 100%;
-        max-height: 95vh;
-      }
-      
-      .reveal-text {
-        font-size: 20px;
-      }
-      
-      .specs-grid {
         grid-template-columns: 1fr;
       }
-      
+
+      .profile-panel::after {
+        top: auto;
+        right: var(--space-8);
+        bottom: 0;
+        width: calc(100% - (var(--space-8) * 2));
+        height: 1px;
+        background: linear-gradient(90deg, transparent, rgba(115, 121, 148, 0.22), transparent);
+      }
+
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 16px;
+      }
+
+      .profile-panel,
+      .content-panel {
+        padding: 32px 22px;
+      }
+
+      .track-card,
+      .player-row,
+      .widget-topline,
+      .activity-head {
+        gap: 12px;
+      }
+
+      .player-row {
+        grid-template-columns: auto 1fr auto;
+      }
+
+      .time-total {
+        display: none;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .activity-grid {
+        grid-template-columns: repeat(18, minmax(0, 1fr));
+      }
+
       .social {
         gap: 12px;
       }
-      
+
       .s-btn {
-        width: 44px;
-        height: 44px;
+        width: 46px;
+        height: 46px;
       }
     }
 
     @supports not (backdrop-filter: blur(1px)) {
-      .card {
-        background: rgba(15, 20, 25, 0.85);
+      .card,
+      .reveal-content {
+        background: rgba(27, 31, 48, 0.96);
       }
+
       .reveal-overlay {
-        background: rgba(0, 0, 0, 0.85);
+        background: rgba(9, 13, 25, 0.9);
       }
     }
   </style>
 </head>
 <body>
-  <canvas class="snow"></canvas>
-  
-  <!-- Click to Reveal Overlay -->
   <div class="reveal-overlay" id="revealOverlay">
     <div class="reveal-content">
       <div class="reveal-icon">
         <i class="fa-solid fa-fingerprint"></i>
       </div>
-      <div class="reveal-text">Click to Reveal</div>
+      <p class="reveal-text">Click to reveal</p>
     </div>
   </div>
 
-  <div class="card">
-    <div class="meta-top">
-      <div class="meta views">
-        <i class="fa-solid fa-eye"></i> <span id="views-count">0</span>
-      </div>
-      <div class="meta info">
-        <i class="fa-solid fa-circle-info"></i>
-      </div>
-      <div class="info-tooltip">I use Arch Btw</div>
-    </div>
+  <div class="page-shell">
+    <div class="ambient-ring" aria-hidden="true"></div>
 
-    <div class="avatar">
-      <img src="./avatar.jpg" alt="Avatar">
-    </div>
-    
-    <h1>nezerkill</h1>
+    <main class="card">
+      <section class="profile-panel">
+        <div class="avatar-shell">
+          <div class="avatar">
+            <img src="./avatar.jpg" alt="Avatar">
+          </div>
+        </div>
 
-    <div class="roles">
-      <div class="role">Linux User</div>
-      <div class="role">Arch Based</div>
-    </div>
+        <div class="profile-copy">
+          <h1>nezerkill</h1>
+          <div class="identity-badge">LINUX USER | PYTHON PROGRAMMER</div>
+        </div>
 
-    <div class="divider"></div>
-    <p class="bio">Arch Linux User | Python Programmer</p>
-    <div class="divider"></div>
+        <div class="meta-row">
+          <div class="meta-badge">
+            <i class="fa-solid fa-eye"></i>
+            <span>Views</span>
+            <span class="views-count" id="views-count">--</span>
+          </div>
+          <div class="meta-badge"><i class="fa-solid fa-circle"></i> Active</div>
+        </div>
+      </section>
 
-    <div class="social">
-      <a class="s-btn github" href="https://github.com/Nezerkill" target="_blank" title="GitHub">
-        <i class="fa-brands fa-github"></i>
-      </a>
-      <a class="s-btn telegram" href="https://t.me/nezerkill" target="_blank" title="Telegram">
-        <i class="fa-brands fa-telegram"></i>
-      </a>
-      <a class="s-btn spotify" href="https://open.spotify.com/user/nezerkill" target="_blank" title="Spotify">
-        <i class="fa-brands fa-spotify"></i>
-      </a>
-      <a class="s-btn youtube" href="https://www.youtube.com/@Nezerkill" target="_blank" title="YouTube">
-        <i class="fa-brands fa-youtube"></i>
-      </a>
-      <a class="s-btn twitch" href="https://www.twitch.tv/nezer_kill" target="_blank" title="Twitch">
-        <i class="fa-brands fa-twitch"></i>
-      </a>
-    </div>
+      <section class="content-panel">
+        <div class="panel-top">
+          <section class="music-widget">
+            <div class="widget-topline">
+              <div class="widget-header">
+                <i class="fa-brands fa-spotify"></i>
+                <span class="panel-kicker">Now Playing</span>
+              </div>
+            </div>
 
-    <div class="specs-section">
-      <div class="specs-title">
-        <i class="fa-solid fa-desktop"></i> PC Specs
-      </div>
-      <div class="specs-grid">
-        <div class="spec-item">
-          <span class="spec-label"><i class="fa-brands fa-linux"></i> OS</span>
-          <span class="spec-value">CachyOS Linux</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label"><i class="fa-solid fa-layer-group"></i> WM</span>
-          <span class="spec-value">Hyprland</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label"><i class="fa-solid fa-microchip"></i> CPU</span>
-          <span class="spec-value">Intel Xeon E5-2640 v3 (16)</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label"><i class="fa-solid fa-video"></i> GPU</span>
-          <span class="spec-value">AMD Radeon RX 5700 XT</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label"><i class="fa-solid fa-memory"></i> RAM</span>
-          <span class="spec-value">16 GB DDR4</span>
-        </div>
-        <div class="spec-item">
-          <span class="spec-label"><i class="fa-solid fa-hard-drive"></i> Storage</span>
-          <span class="spec-value">512 GB NVMe</span>
-        </div>
-      </div>
-    </div>
+            <div class="track-card">
+              <div class="track-art" aria-hidden="true">
+                <div class="track-pulse"><i class="fa-solid fa-record-vinyl"></i></div>
+              </div>
 
-    <div class="device-section">
-      <div class="device-icon"><i class="fa-solid fa-mobile-screen"></i></div>
-      <div class="device-info">
-        <div class="device-name">Poco F6</div>
-        <div class="device-tag">8/256 GB</div>
-        <div class="device-tag">Snapdragon 8s Gen 3</div>
-        <div class="device-tag">Rooted</div>
-        <div class="device-tag">Evo-X</div>
-        <div class="device-tag">Daily Driver</div>
-      </div>
-    </div>
+              <div class="track-meta">
+                <p class="track-title">abandon her soul</p>
+                <p class="track-artist">hkmori</p>
+              </div>
+            </div>
 
-    <div class="music-player">
-      <i class="fa-solid fa-circle-info info-icon"></i>
-      <div class="track-tooltip">hkmori - abandon her soul</div>
-      <div class="controls">
-        <button id="play-btn" aria-label="Play"><i class="fa-solid fa-play"></i></button>
-        <div class="progress" id="progress">
-          <div class="bar" id="progress-bar"></div>
+            <div class="player-row">
+              <button id="play-btn" aria-label="Play"><i class="fa-solid fa-play"></i></button>
+              <div class="progress" id="progress" aria-label="Track progress">
+                <div class="bar" id="progress-bar"></div>
+              </div>
+              <span class="time" id="time">0:00</span>
+              <span class="time-total" id="duration">0:00</span>
+            </div>
+            <audio id="audio" src="./hkmori - abandon her soul.flac"></audio>
+          </section>
+
+          <section class="stats-widget">
+            <div class="widget-topline">
+              <div class="widget-header">
+                <i class="fa-brands fa-github"></i>
+                <span class="panel-kicker">GitHub Statistics</span>
+              </div>
+              <div class="widget-status"><i class="fa-solid fa-circle"></i> Active</div>
+            </div>
+
+            <div class="stat-grid">
+              <article class="stat-card">
+                <i class="fa-solid fa-star"></i>
+                <div class="stat-value" id="github-stars">--</div>
+                <div class="stat-label">Stars</div>
+              </article>
+
+              <article class="stat-card has-tooltip">
+                <i class="fa-solid fa-rotate-left"></i>
+                <div class="stat-value" id="github-commits">--</div>
+                <div class="stat-label">Commits</div>
+                <div class="stat-tooltip">Last Month</div>
+              </article>
+
+              <article class="stat-card">
+                <i class="fa-solid fa-users"></i>
+                <div class="stat-value" id="github-followers">--</div>
+                <div class="stat-label">Followers</div>
+              </article>
+            </div>
+
+            <div class="activity-block">
+              <div class="activity-head">
+                <span class="activity-label">Commit activity</span>
+                <div class="activity-dots" aria-hidden="true">
+                  <span></span>
+                  <span></span>
+                  <span></span>
+                  <span style="background: rgba(229, 186, 255, 0.84);"></span>
+                </div>
+              </div>
+              <div class="activity-grid" aria-hidden="true">
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+                <span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+              </div>
+            </div>
+          </section>
         </div>
-        <span class="time" id="time">0:00</span>
-      </div>
-      <audio id="audio" src="./hkmori - abandon her soul.flac"></audio>
-    </div>
+
+        <footer class="social">
+          <a class="s-btn github" href="https://github.com/Nezerkill" target="_blank" rel="noreferrer" title="GitHub">
+            <i class="fa-brands fa-github"></i>
+          </a>
+          <a class="s-btn telegram" href="https://t.me/nezerkill" target="_blank" rel="noreferrer" title="Telegram">
+            <i class="fa-brands fa-telegram"></i>
+          </a>
+          <a class="s-btn spotify" href="https://open.spotify.com/user/nezerkill" target="_blank" rel="noreferrer" title="Spotify">
+            <i class="fa-brands fa-spotify"></i>
+          </a>
+          <a class="s-btn youtube" href="https://www.youtube.com/@Nezerkill" target="_blank" rel="noreferrer" title="YouTube">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+          <a class="s-btn twitch" href="https://www.twitch.tv/nezer_kill" target="_blank" rel="noreferrer" title="Twitch">
+            <i class="fa-brands fa-twitch"></i>
+          </a>
+        </footer>
+      </section>
+    </main>
   </div>
 
   <script>
-    // Click to Reveal
     const revealOverlay = document.getElementById('revealOverlay');
-    let revealed = false;
-    
+
     revealOverlay.addEventListener('click', function() {
       this.classList.add('hidden');
-      revealed = true;
-      draw(); // Start snow after reveal
     });
 
-    // Snow effect
-    const canvas = document.querySelector('.snow');
-    const ctx = canvas.getContext('2d');
-    let w, h;
-    const flakes = [];
-    
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-    }
-    
-    addEventListener('resize', resize);
-    resize();
-    
-    for (let i = 0; i < 100; i++) {
-      flakes.push({
-        x: Math.random() * w,
-        y: Math.random() * h,
-        r: Math.random() * 4 + 1,
-        d: Math.random() + 1
-      });
-    }
-    
-    let angle = 0;
-    
-    function draw() {
-      if (!revealed) return;
-      
-      ctx.clearRect(0, 0, w, h);
-      ctx.fillStyle = 'white';
-      ctx.beginPath();
-      
-      for (let f of flakes) {
-        ctx.moveTo(f.x, f.y);
-        ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
-      }
-      ctx.fill();
-      
-      angle += 0.005;
-      for (let f of flakes) {
-        f.y += Math.pow(f.d, 2) * 0.5 + 0.5;
-        f.x += Math.sin(angle) * 1.5;
-        if (f.y > h) {
-          f.y = 0;
-          f.x = Math.random() * w;
+    fetch('https://api.countapi.xyz/hit/nezerkill-bio-site/views')
+      .then(function(res) {
+        if (!res.ok) {
+          throw new Error('view counter request failed');
         }
-      }
-      
-      requestAnimationFrame(draw);
-    }
 
-    // Views counter
-    fetch("https://api.counterapi.dev/v2/biocount/biocount/up")
-      .then(res => res.json())
-      .then(data => {
-        if (data?.data?.up_count !== undefined) {
-          document.getElementById("views-count").textContent = data.data.up_count.toLocaleString();
+        return res.json();
+      })
+      .then(function(data) {
+        const views = document.getElementById('views-count');
+
+        if (data && data.value !== undefined && Number.isFinite(Number(data.value))) {
+          views.textContent = Number(data.value).toLocaleString();
         } else {
-          document.getElementById("views-count").textContent = "0";
+          views.textContent = '--';
         }
       })
-      .catch(() => {
-        document.getElementById("views-count").textContent = "0";
+      .catch(function() {
+        document.getElementById('views-count').textContent = '--';
       });
 
-    // Music player
+    function formatCompactNumber(value) {
+      if (!Number.isFinite(value)) {
+        return '--';
+      }
+
+      return new Intl.NumberFormat('en', {
+        notation: 'compact',
+        maximumFractionDigits: 1
+      }).format(value);
+    }
+
+    function setGithubFallback() {
+      document.getElementById('github-stars').textContent = '--';
+      document.getElementById('github-commits').textContent = '--';
+      document.getElementById('github-followers').textContent = '--';
+    }
+
+    function parseLastPage(linkHeader) {
+      if (!linkHeader) {
+        return null;
+      }
+
+      const match = linkHeader.match(/&page=(\d+)>; rel="last"/);
+      return match ? Number(match[1]) : null;
+    }
+
+    function fetchJson(url) {
+      return fetch(url).then(function(res) {
+        if (!res.ok) {
+          throw new Error('request failed');
+        }
+
+        return res.json();
+      });
+    }
+
+    function getLastMonthIsoDate() {
+      const date = new Date();
+      date.setMonth(date.getMonth() - 1);
+      return date.toISOString();
+    }
+
+    function fetchCommitCount(repoName) {
+      const since = encodeURIComponent(getLastMonthIsoDate());
+      const url = 'https://api.github.com/repos/Nezerkill/' + repoName + '/commits?author=Nezerkill&since=' + since + '&per_page=1';
+
+      return fetch(url).then(function(res) {
+        if (!res.ok) {
+          throw new Error('commit request failed');
+        }
+
+        const lastPage = parseLastPage(res.headers.get('link'));
+
+        return res.json().then(function(commits) {
+          if (lastPage !== null) {
+            return lastPage;
+          }
+
+          return Array.isArray(commits) ? commits.length : 0;
+        });
+      });
+    }
+
+    fetchJson('https://api.github.com/users/Nezerkill')
+      .then(function(profile) {
+        document.getElementById('github-followers').textContent = formatCompactNumber(Number(profile.followers) || 0);
+      })
+      .catch(function() {
+        document.getElementById('github-followers').textContent = '--';
+      });
+
+    fetchJson('https://api.github.com/users/Nezerkill/repos?per_page=100&type=owner')
+      .then(function(repos) {
+        const repoList = Array.isArray(repos) ? repos : [];
+        const totalStars = repoList.reduce(function(sum, repo) {
+          return sum + (Number(repo.stargazers_count) || 0);
+        }, 0);
+
+        document.getElementById('github-stars').textContent = formatCompactNumber(totalStars);
+
+        return Promise.allSettled(repoList.map(function(repo) {
+          return fetchCommitCount(repo.name);
+        }));
+      })
+      .then(function(results) {
+        const successful = results.filter(function(result) {
+          return result.status === 'fulfilled';
+        });
+
+        if (!successful.length) {
+          document.getElementById('github-commits').textContent = '--';
+          return;
+        }
+
+        const totalCommits = successful.reduce(function(sum, result) {
+          return sum + (Number(result.value) || 0);
+        }, 0);
+
+        document.getElementById('github-commits').textContent = formatCompactNumber(totalCommits);
+      })
+      .catch(function() {
+        document.getElementById('github-stars').textContent = '--';
+        document.getElementById('github-commits').textContent = '--';
+      });
+
     const audio = document.getElementById('audio');
     const playBtn = document.getElementById('play-btn');
     const progress = document.getElementById('progress');
     const progressBar = document.getElementById('progress-bar');
     const timeEl = document.getElementById('time');
+    const durationEl = document.getElementById('duration');
 
-    playBtn.onclick = () => {
+    function formatTime(value) {
+      if (!Number.isFinite(value) || value < 0) {
+        return '0:00';
+      }
+
+      const minutes = Math.floor(value / 60);
+      const seconds = Math.floor(value % 60);
+      return minutes + ':' + String(seconds).padStart(2, '0');
+    }
+
+    function syncPlayState() {
+      playBtn.innerHTML = audio.paused
+        ? '<i class="fa-solid fa-play"></i>'
+        : '<i class="fa-solid fa-pause"></i>';
+    }
+
+    playBtn.addEventListener('click', function() {
       if (audio.paused) {
-        audio.play();
-        playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
+        audio.play().catch(function() {});
       } else {
         audio.pause();
-        playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
       }
-    };
 
-    audio.ontimeupdate = () => {
-      const progressPercent = (audio.currentTime / audio.duration) * 100;
+      syncPlayState();
+    });
+
+    audio.addEventListener('loadedmetadata', function() {
+      durationEl.textContent = formatTime(audio.duration);
+    });
+
+    audio.addEventListener('timeupdate', function() {
+      const duration = Number.isFinite(audio.duration) && audio.duration > 0 ? audio.duration : 0;
+      const progressPercent = duration ? (audio.currentTime / duration) * 100 : 0;
+
       progressBar.style.width = progressPercent + '%';
-      let m = Math.floor(audio.currentTime / 60);
-      let s = Math.floor(audio.currentTime % 60);
-      if (s < 10) s = '0' + s;
-      timeEl.textContent = `${m}:${s}`;
-    };
+      timeEl.textContent = formatTime(audio.currentTime);
+    });
 
-    progress.onclick = (e) => {
+    audio.addEventListener('play', syncPlayState);
+    audio.addEventListener('pause', syncPlayState);
+
+    progress.addEventListener('click', function(e) {
+      if (!Number.isFinite(audio.duration) || audio.duration <= 0) {
+        return;
+      }
+
       const rect = progress.getBoundingClientRect();
       const offsetX = e.clientX - rect.left;
-      const newTime = (offsetX / rect.width) * audio.duration;
-      audio.currentTime = newTime;
-    };
+      const ratio = Math.min(Math.max(offsetX / rect.width, 0), 1);
 
-    audio.onended = () => {
-      playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
+      audio.currentTime = ratio * audio.duration;
+    });
+
+    audio.addEventListener('ended', function() {
       progressBar.style.width = '0%';
-    };
+      timeEl.textContent = '0:00';
+      syncPlayState();
+    });
   </script>
 </body>
 </html>
