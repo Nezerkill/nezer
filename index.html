@@ -371,6 +371,7 @@
       box-shadow: inset 0 0 0 1px rgba(115, 121, 148, 0.14);
       color: var(--text-soft);
       font-size: 12px;
+      white-space: nowrap;
     }
 
     .identity-badge,
@@ -927,21 +928,49 @@
       }
 
       .player-row {
-        grid-template-columns: 1fr;
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas:
+          'play progress progress'
+          'time time duration';
+        row-gap: 8px;
       }
 
-      #play-btn,
-      .time,
-      .time-total {
-        justify-self: center;
+      #play-btn {
+        grid-area: play;
+      }
+
+      .progress {
+        grid-area: progress;
+      }
+
+      .time {
+        grid-area: time;
+        justify-self: start;
       }
 
       .time-total {
+        grid-area: duration;
         display: block;
+        justify-self: end;
       }
 
       .stat-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 8px;
+      }
+
+      .stat-card {
+        min-height: 84px;
+        padding: 12px 8px;
+      }
+
+      .stat-value {
+        font-size: 22px;
+      }
+
+      .stat-label {
+        font-size: 10px;
+        letter-spacing: 0.1em;
       }
 
       .activity-grid {
@@ -1032,7 +1061,7 @@
 
         <div class="profile-copy">
           <h1>nezerkill</h1>
-          <div class="identity-badge">NixOS · Hyprland · Vibe coder</div>
+          <div class="identity-badge">Vibe coder</div>
         </div>
 
         <div class="meta-row">
