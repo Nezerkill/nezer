@@ -1,1 +1,4 @@
+.vite/
+node_modules/
 *_plan.md
+.DS_Store
